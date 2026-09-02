@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Student {
+  id          Int      @id @default(autoincrement())
+  rollNumber  String   @unique
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phone       String?
+  dateOfBirth String?
+  gender      String?
+  address     String?
+  department  String
+  semester    Int
+  year        Int
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  grades Grade[]
+}
+
+model Faculty {
+  id          Int      @id @default(autoincrement())
+  employeeId  String   @unique
+  firstName   String
+  lastName    String
+  email       String   @unique
+  phone       String?
+  department  String
+  designation String
+  qualification String?
+  salary      Float?
+  joinDate    String?
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  courses Course[]
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  courseCode  String   @unique
+  courseName  String
+  description String?
+  credits     Int
+  department  String
+  semester    Int
+  facultyId   Int?
+  faculty     Faculty? @relation(fields: [facultyId], references: [id])
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  grades Grade[]
+}
+
+model Grade {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  student     Student  @relation(fields: [studentId], references: [id])
+  courseId     Int
+  course      Course   @relation(fields: [courseId], references: [id])
+  examType    String
+  marks       Float
+  totalMarks  Float
+  grade       String?
+  semester    Int
+  academicYear String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([studentId, courseId, examType, academicYear])
+}
