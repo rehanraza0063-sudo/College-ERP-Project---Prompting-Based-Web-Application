@@ -1,5 +1,7 @@
 # College ERP System
 
+location - http://localhost:3000/
+
 A full-stack Enterprise Resource Planning system for college management built with:
 
 - **Frontend**: React 18 + Vite + React Router + Recharts + Lucide Icons
